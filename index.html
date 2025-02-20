@@ -27,7 +27,7 @@
     </section>
     <section class="main-content">
         <h1 id="">
-            <center>TODO</center>
+            <center>REVC: Fast, Robust and Expressive Zero-Shot Voice Conversion with Diffusion Transformers</center>
         </h1>
         <h3 id="">
             <center>A work submitted to INTERSPEECH 2025</center>
@@ -36,10 +36,10 @@
 
         <br><br>
         <h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
-        <p>
+        <p> In real-world voice conversion applications, environmental noise in source speech and user demands for expressive output pose critical challenges. Traditional ASR-based methods ensure noise robustness but suppress prosody, while SSL-based models improve expressiveness but suffer from timbre leakage and noise sensitivity. This paper proposes REVC, a noise-robust expressive voice conversion system. Key innovations include: (1) A random erasing strategy to mitigate the information redundancy inherent in SSL feature, enhancing noise robustness and expressiveness; (2) Implicit alignment inspired by E2TTS to suppress non-essential feature reconstruction; (3) Integration of Shortcut Models to accelerate flow matching inference, significantly reducing to 4 steps. Experimental results demonstrate that our model outperforms baselines such as Seed-VC in zero-shot scenarios on the noisy set, while also performing comparably to Seed-VC on the clean set. In addition, REVC can be compatible with singing voice conversion within one model. 
         <table frame=void rules=none>
             <tr>
-                <center><img src='fig/overview.png' width="60%"></center>
+                <center><img src='fig/interspeech2025-diffusionvc_overview.png' width="65%"></center>
                 <center>Overview of our framework</center>
             </tr>
         </table>
