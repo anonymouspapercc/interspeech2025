@@ -2,7 +2,7 @@
 <html lang="en-US">
 
 <head>
-    <title>Demo Page of REVC</title>
+    <title>Demo Page of REF-VC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,7 @@
     </section>
     <section class="main-content">
         <h1 id="">
-            <center>REVC: Fast, Robust and Expressive Zero-Shot Voice Conversion with Diffusion Transformers</center>
+            <center>REF-VC: Robust, Expressive and Fast Zero-Shot Voice Conversion with Diffusion Transformers</center>
         </h1>
         <h3 id="">
             <center>A work submitted to INTERSPEECH 2025</center>
@@ -36,11 +36,11 @@
 
         <br><br>
         <h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
-        <p> In real-world voice conversion applications, environmental noise in source speech and user demands for expressive output pose critical challenges. Traditional ASR-based methods ensure noise robustness but suppress prosody, while SSL-based models improve expressiveness but suffer from timbre leakage and noise sensitivity. This paper proposes REVC, a noise-robust expressive voice conversion system. Key innovations include: (1) A random erasing strategy to mitigate the information redundancy inherent in SSL feature, enhancing noise robustness and expressiveness; (2) Implicit alignment inspired by E2TTS to suppress non-essential feature reconstruction; (3) Integration of Shortcut Models to accelerate flow matching inference, significantly reducing to 4 steps. Experimental results demonstrate that our model outperforms baselines such as Seed-VC in zero-shot scenarios on the noisy set, while also performing comparably to Seed-VC on the clean set. In addition, REVC can be compatible with singing voice conversion within one model. 
+        <p> In real-world voice conversion applications, environmental noise in source speech and user demands for expressive output pose critical challenges. Traditional ASR-based methods ensure noise robustness but suppress prosody, while SSL-based models improve expressiveness but suffer from timbre leakage and noise sensitivity. This paper proposes REF-VC, a noise-robust expressive voice conversion system. Key innovations include: (1) A random erasing strategy to mitigate the information redundancy inherent in SSL feature, enhancing noise robustness and expressiveness; (2) Implicit alignment inspired by E2TTS to suppress non-essential feature reconstruction; (3) Integration of Shortcut Models to accelerate flow matching inference, significantly reducing to 4 steps. Experimental results demonstrate that our model outperforms baselines such as Seed-VC in zero-shot scenarios on the noisy set, while also performing comparably to Seed-VC on the clean set. In addition, REF-VC can be compatible with singing voice conversion within one model. 
         <table frame=void rules=none>
             <tr>
                 <center><img src='fig/interspeech2025-diffusionvc_overview.png' width="65%"></center>
-                <center>Overview of REVC</center>
+                <center>Overview of REF-VC</center>
             </tr>
         </table>
         <br><br>
@@ -50,7 +50,7 @@
         <p>Compared Methods</p>
         <ul>
             <li><b>VITS-VC : a internal VITS-based VC system. </li> 
-            <li><b><a href="https://github.com/Plachtaa/seed-vc">Seed-VC</a> : a diffusion transformer based VC system.</li>
+            <li><b><a href="https://github.com/Plachtaa/seed-vc">Seed-VC</a><sup>1</sup> : a state-of-the-art VC system based on diffusion transformers.</li>
         </ul>
         
         <h3>Clean Samples</h3>
@@ -73,8 +73,8 @@
         
     <h3>References:</h3>
     <div>
-        <!-- <div><cite><a href="https://arxiv.org/pdf/2307.16430.pdf">
-                [1] J. Kong, J. Park, B. Kim, J. Kim, D. Kong, and S. Kim, “VITS2: Improving Quality and Efficiency of Single-Stage Text-to-Speech with Adversarial Learning and Architecture Design,” in Proc. INTERSPEECH 2023, 2023, pp. 4374–4378.</a></cite></div> -->
+        <div><cite><a href="https://arxiv.org/pdf/2411.09943.pdf">
+                [1] S. Liu, “Zero-shot voice conversion with diffusion transformers,” CoRR, vol. abs/2411.09943, 2024.</a></cite></div>
         <!-- <div><cite><a href="https://arxiv.org/pdf/2211.02336.pdf">
                 [2] Detai Xin, Sharath Adavanne, Federico Ang, Ashish Kulkarni, Shinnosuke Takamichi, and Hiroshi Saruwatari,
                 "Improving speech prosody of audiobook text-to-speech synthesis with acoustic and textual contexts," in
@@ -91,10 +91,13 @@
 <script type="" text="javascript">
     function noisy() {
         let scenes = [
-            [1],
-            [2]
+            "63703_CS_2_prompt.wav",
+            "63703_neu_Ses01F_script02_1_M025.wav",
+            "203134_hap_Ses01F_script03_1_M013.wav",
+            "ksong_qgqay605.wav",
+            "ly_wsQX6005.wav",
         ]
-        let models = [["Prompt", "prompt"], ["Source", "source"], ["VITS-VC", "vitsvc"],  ["Seed-VC", "seedvc"], ["REVC (32NFE)", "revc32"], ["REVC (4NFE)", "revc4"]]
+        let models = [["Prompt", "prompt"], ["Source", "source"], ["VITS-VC", "vits-vc"],  ["Seed-VC", "seed-vc"], ["REF-VC (32NFE)", "ref-vc32"], ["REF-VC (4NFE)", "ref-vc4"]]
         let short_data = ""
                 // `
                 // <tr>
@@ -103,22 +106,31 @@
                 // `
         for (const id in models) {
             model = models[id][0]
-            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '<strong></td>'
+            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '</strong></td>'
         }
         short_data += `</tr>`
         
         for (let x in scenes) {
-            let scene = scenes[x]
-            let file = scene[0]
+            let file = scenes[x]
+            let name = file.split("_")
+            let prompt_file = name[0] + ".wav"
+            let source_file = name.splice(1)
+            source_file = source_file.join("_")
+
             let scene_data = ""
 
             scene_data += '<tr>'
             // scene_data += '<td style="text-align: center; width: 10%;" rowspan=1>' + text + '</td>'
-            // scene_data += '<td style="text-align: center; width: 10%;font-size:14px" rowspan=1>' + translation + '</td>'
+            // scene_data += '<td style="text-align: center; width: 10%;font-size:14px" rowspan=1>' + traslation + '</td>'
             for (let z in models) {
                 let model = models[z][1]
-                scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './demos/' + model + '/' + file + '.wav' + '"></audio></td>'
-                
+                if (model == "prompt") {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + prompt_file + '"></audio></td>'
+                } else if (model == "source") {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + source_file + '"></audio></td>'
+                } else {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + file + '"></audio></td>'
+                }
             }
             scene_data += '</tr>'
             short_data += scene_data
@@ -128,10 +140,20 @@
 
     function clean() {
         let scenes = [
-            [1],
-            [2]
+            "15265_175348-175350.wav",
+            "103675_common_voice_en_96260-common_voice_en_96263.wav",
+            "153872_common_voice_en_490614-common_voice_en_490613.wav",
+            "115876_sur_Ses01M_script02_2_F038.wav",
+            "0048_zh-cn_shenlige_fear_16.wav",
+            "0048_zh-cn_shenlige_joy_79.wav",
+            "0048_zh-cn_shenlige_sadness_57.wav",
+            "0057_frozen_0.wav",
+            "0057_frozen_4.wav",
+            "0086_28-male.wav",
+            "aishell2_db6_surprise_240005.wav",
+            "aishell4_db6_fear_250002.wav",
         ]
-        let models = [["Prompt", "prompt"], ["Source", "source"], ["VITS-VC", "vitsvc"],  ["Seed-VC", "seedvc"], ["REVC (32NFE)", "revc32"], ["REVC (4NFE)", "revc4"]]
+        let models = [["Prompt", "prompt"], ["Source", "source"], ["VITS-VC", "vits-vc"],  ["Seed-VC", "seed-vc"], ["REF-VC (32NFE)", "ref-vc32"], ["REF-VC (4NFE)", "ref-vc4"]]
         let short_data = ""
                 // `
                 // <tr>
@@ -140,15 +162,17 @@
                 // `
         for (const id in models) {
             model = models[id][0]
-            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '<strong></td>'
+            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '</strong></td>'
         }
         short_data += `</tr>`
         
         for (let x in scenes) {
-            let scene = scenes[x]
-            let file = scene[0]
-            // let text = scene[1]
-            // let traslation = scene[2]
+            let file = scenes[x]
+            let name = file.split("_")
+            let prompt_file = name[0] + ".wav"
+            let source_file = name.splice(1)
+            source_file = source_file.join("_")
+
             let scene_data = ""
 
             scene_data += '<tr>'
@@ -156,8 +180,13 @@
             // scene_data += '<td style="text-align: center; width: 10%;font-size:14px" rowspan=1>' + traslation + '</td>'
             for (let z in models) {
                 let model = models[z][1]
-                scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './demos/' + model + '/' + file + '.wav' + '"></audio></td>'
-                
+                if (model == "prompt") {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + prompt_file + '"></audio></td>'
+                } else if (model == "source") {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + source_file + '"></audio></td>'
+                } else {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + file + '"></audio></td>'
+                }
             }
             scene_data += '</tr>'
             short_data += scene_data
@@ -167,10 +196,16 @@
 
     function svc() {
         let scenes = [
-            [1],
-            [2]
+            "ly_qilixiang_2.wav",
+            "qwang_qilixiang_3.wav",
+            "ksong_qilixiang_4.wav",
+            "lxie_qilixiang_5.wav",
+            "ymzhang_000286_0.wav",
+            "ymzhang_000286_1.wav",
+            "ymzhang_000286_2.wav",
+            "ymzhang_000286_3.wav",
         ]
-        let models = [["Prompt", "prompt"], ["Source", "source"], ["REVC (32NFE)", "revc32"]]
+        let models = [["Prompt", "prompt"], ["Source", "source"], ["REF-VC (32NFE)", "ref-vc32"]]
         let short_data = ""
                 // `
                 // <tr>
@@ -179,15 +214,17 @@
                 // `
         for (const id in models) {
             model = models[id][0]
-            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '<strong></td>'
+            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '</strong></td>'
         }
         short_data += `</tr>`
         
         for (let x in scenes) {
-            let scene = scenes[x]
-            let file = scene[0]
-            // let text = scene[1]
-            // let traslation = scene[2]
+            let file = scenes[x]
+            let name = file.split("_")
+            let prompt_file = name[0] + ".wav"
+            let source_file = name.splice(1)
+            source_file = source_file.join("_")
+
             let scene_data = ""
 
             scene_data += '<tr>'
@@ -195,17 +232,41 @@
             // scene_data += '<td style="text-align: center; width: 10%;font-size:14px" rowspan=1>' + traslation + '</td>'
             for (let z in models) {
                 let model = models[z][1]
-                scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './demos/' + model + '/' + file + '.wav' + '"></audio></td>'
-                
+                if (model == "prompt") {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + prompt_file + '"></audio></td>'
+                } else if (model == "source") {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + source_file + '"></audio></td>'
+                } else {
+                    scene_data += '<td style="text-align: center"><audio style="width: 100%;" controls="" src="' + './samples/' + model + '/' + file + '"></audio></td>'
+                }
             }
             scene_data += '</tr>'
             short_data += scene_data
         }
         return short_data
     }
+
+    function bindAudioEvents() {
+        // 获取所有 audio 元素
+        const audioElements = document.querySelectorAll('audio');
+
+        // 遍历每个 audio 元素
+        audioElements.forEach(audio => {
+            // 监听 play 事件
+            audio.addEventListener('play', () => {
+                // 暂停其他所有 audio 元素
+                audioElements.forEach(otherAudio => {
+                    if (otherAudio !== audio && !otherAudio.paused) {
+                        otherAudio.pause();
+                    }
+                });
+            });
+        });
+    }
     window.onload = function () {
         document.getElementById('tbody_clean').innerHTML = clean()
         document.getElementById('tbody_noisy').innerHTML = noisy()
         document.getElementById('tbody_svc').innerHTML = svc()
+        bindAudioEvents()
     }
 </script> 
