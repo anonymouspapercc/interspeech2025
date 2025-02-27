@@ -66,6 +66,8 @@
         </table>
 
         <h3>Singing Voice Conversion</h3>
+        <p style="font-size: medium; font-weight: 100; color: gray;">*Note that the samples of seedvc are generated from a <a href="https://huggingface.co/Plachta/Seed-VC/blob/main/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema.pth", target="_blank">separate svc model</a>, 
+            and the samples of REF-VC are generated using the same model as the above speech samples.</p>
         <table style="margin-left: auto; margin-right: auto;">
             <tbody id="tbody_svc">
             </tbody>
@@ -196,6 +198,10 @@
 
     function svc() {
         let scenes = [
+            "0004_qilixiang_2.wav",
+            "0003_qilixiang_3.wav",
+            "0005_qilixiang_4.wav",
+            "0006_qilixiang_5.wav",
             "ly_qilixiang_2.wav",
             "qwang_qilixiang_3.wav",
             "ksong_qilixiang_4.wav",
@@ -205,8 +211,8 @@
             "ymzhang_000286_2.wav",
             "ymzhang_000286_3.wav",
         ]
-        let models = [["Prompt", "prompt"], ["Source", "source"], ["REF-VC (32NFE)", "ref-vc32"]]
-        let short_data = ""
+        let models = [["Prompt", "prompt"], ["Source", "source"], ["Seed-VC", "seed-vc"], ["REF-VC (32NFE)", "ref-vc32"]]
+        let short_data = '<td style="text-align: center; width: 10%;" colspan=2> </td>'
                 // `
                 // <tr>
                 //     <td style="text-align: center; " rowspan=1><strong>Text<strong></td>
@@ -214,7 +220,7 @@
                 // `
         for (const id in models) {
             model = models[id][0]
-            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>' + model  + '</strong></td>'
+            short_data += '<td style="text-align: center; width: 14%;" rowspan=1><strong>'+ model  + '</strong></td>'
         }
         short_data += `</tr>`
         
@@ -228,6 +234,16 @@
             let scene_data = ""
 
             scene_data += '<tr>'
+            console.log(x% 4)
+            if (x == 0) {
+                scene_data += '<td style="text-align: center; width: 6%;" rowspan=8><a href="https://music.apple.com/cn/song/%E4%B8%83%E9%87%8C%E9%A6%99/536115195" target="_blank">七里香</a></td>'
+                scene_data += '<td style="text-align: center; width: 10%;" rowspan=4>singing prompt</td>'
+            } else if (x == 4) {
+                scene_data += '<td style="text-align: center; width: 10%;" rowspan=4>speech prompt</td>'
+            } else if (x == 8) {
+                scene_data += '<td style="text-align: center; width: 8%;" rowspan=8><a href="https://music.apple.com/cn/song/%E5%A6%82%E8%A7%81%E9%9D%92%E5%B1%B1/1564040476" target="_blank">如见青山</a></td>'
+                scene_data += '<td style="text-align: center; width: 10%;" rowspan=4>speech prompt</td>'
+            }
             // scene_data += '<td style="text-align: center; width: 10%;" rowspan=1>' + text + '</td>'
             // scene_data += '<td style="text-align: center; width: 10%;font-size:14px" rowspan=1>' + traslation + '</td>'
             for (let z in models) {
